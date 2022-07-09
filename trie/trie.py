@@ -1,14 +1,16 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # simple trie implementation using dict
 
 
-from typing import Tuple, Union, List
+from typing import Optional, Tuple, Union, List
 
 
 NULL = object()
 
 
 class Trie(dict):
+    __slots__ = ()
+
     def add(self, word: str) -> None:
         node = self
         _len = len(word)
@@ -78,7 +80,9 @@ class Trie(dict):
         endings, nodes = self._like(word=word)
         return [f"{word}{ending}" for ending in endings]
 
-    def generate_words(self, prefix="", node=None) -> List[str]:
+    def generate_words(
+        self, prefix: str = "", node: Optional["Trie"] = None
+    ) -> List[str]:
         """Generate all words in the trie that start with the given prefix.
 
         Usage:
