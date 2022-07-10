@@ -3,7 +3,6 @@ import timeit
 from contextlib import contextmanager
 from random import choices, randint
 from string import ascii_letters
-from typing import List, Union
 
 from trie import Trie
 
@@ -23,7 +22,7 @@ def generate_random_word(length: int = None) -> str:
     return "".join(choices(ascii_letters, k=length))
 
 
-def get_size(obj, seen: Union[set, "None"] = None) -> int:
+def get_size(obj, seen: set = None) -> int:
     """Recursively finds size of objects"""
     # from https://goshippo.com/blog/measure-real-size-any-python-object/
 
@@ -37,16 +36,16 @@ def get_size(obj, seen: Union[set, "None"] = None) -> int:
     # self-referential objects
     seen.add(obj_id)
     if isinstance(obj, dict):
-        size += sum([get_size(v, seen) for v in obj.values()])
-        size += sum([get_size(k, seen) for k in obj.keys()])
+        size += sum(get_size(v, seen) for v in obj.values())
+        size += sum(get_size(k, seen) for k in obj.keys())
     elif hasattr(obj, "__dict__"):
         size += get_size(obj.__dict__, seen)
     elif hasattr(obj, "__iter__") and not isinstance(obj, (str, bytes, bytearray)):
-        size += sum([get_size(i, seen) for i in obj])
+        size += sum(get_size(i, seen) for i in obj)
     return size
 
 
-def benchmark_trie(input_data: List[str], test_data: List[str]):
+def benchmark_trie(input_data: list[str], test_data: list[str]):
     _trie = Trie()
     _list = list()
     _set = set()
@@ -86,10 +85,7 @@ def benchmark_trie(input_data: List[str], test_data: List[str]):
 
 
 if __name__ == "__main__":
-    with open("../clojure-spellchecker/resources/words.txt") as f:
-        words = f.read().splitlines()
-    words.extend(generate_random_word() for _ in range(500_000))
-
+    words = [generate_random_word() for _ in range(500_000)]
     non_existent_words = [generate_random_word() for _ in range(5_000)]
     find_words = choices(words, k=5_000) + non_existent_words
 

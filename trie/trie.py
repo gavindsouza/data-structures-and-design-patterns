@@ -2,7 +2,7 @@
 # simple trie implementation using dict
 
 
-from typing import Optional, Tuple, Union, List
+from typing import Optional
 
 
 NULL = object()
@@ -25,7 +25,7 @@ class Trie(dict):
             node[letter] = next_node
             node = next_node
 
-    def _search(self, word: str) -> Tuple[str, Union["Trie", "None"]]:
+    def _search(self, word: str) -> tuple[str, Optional["Trie"]]:
         node = self
 
         for letter in word:
@@ -38,7 +38,7 @@ class Trie(dict):
             return word, node
         return "", None
 
-    def _like(self, word: str) -> Tuple[List[str], Union["Trie", "None"]]:
+    def _like(self, word: str) -> tuple[list[str], Optional["Trie"]]:
         node = self
         first = True
         for letter in word:
@@ -65,7 +65,7 @@ class Trie(dict):
         word, node = self._search(word=word)
         return node is not None and node[None] is NULL
 
-    def like(self, word: str) -> List[str]:
+    def like(self, word: str) -> list[str]:
         """Generate all words in the trie that start with the given prefix.
 
         Usage:
@@ -82,7 +82,7 @@ class Trie(dict):
 
     def generate_words(
         self, prefix: str = "", node: Optional["Trie"] = None
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate all words in the trie that start with the given prefix.
 
         Usage:
